@@ -1,7 +1,7 @@
 # Cursor Review Prompt
 
 ```text
-Review this codebase for production readiness using /Users/chosone/projects/vibe-ready.
+Review this codebase for production readiness using Vibe Ready.
 
 Focus on whether this AI-generated or vibe-coded prototype is safe to launch.
 

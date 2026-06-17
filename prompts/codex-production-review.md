@@ -1,7 +1,7 @@
 # Codex Production Review Prompt
 
 ```text
-Use /Users/chosone/projects/vibe-ready as the production-readiness standard.
+Use Vibe Ready as the production-readiness standard.
 
 Review this project as an AI-built/vibe-coded app that may be headed toward launch.
 
@@ -16,7 +16,7 @@ Read:
 - AI/model/agent/tool code if present
 - tests
 
-Run /Users/chosone/projects/vibe-ready/scripts/prodcheck.sh . if shell access is available.
+Run `scripts/prodcheck.sh .` from the Vibe Ready repo, or run the equivalent path to that script from the target project, if shell access is available.
 
 Return findings by severity:
 - Blocker

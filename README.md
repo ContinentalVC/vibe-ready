@@ -37,14 +37,14 @@ Copy or reference this repo from the project you want to review:
 
 ```bash
 cd /path/to/your/app
-/Users/chosone/projects/vibe-ready/scripts/prodcheck.sh .
+../vibe-ready/scripts/prodcheck.sh .
 ```
 
 Then ask your agent:
 
 ```text
-Read /Users/chosone/projects/vibe-ready/AGENTS.md.
-Use the checklists in /Users/chosone/projects/vibe-ready/checklists.
+Read the Vibe Ready AGENTS.md file.
+Use the checklists in Vibe Ready's checklists/ directory.
 Review this app for launch blockers, production risks, and missing safeguards.
 Return only actionable findings grouped by severity.
 ```

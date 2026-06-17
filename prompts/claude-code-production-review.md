@@ -3,7 +3,7 @@
 ```text
 Act as a production-readiness reviewer for an AI-built app.
 
-Use the checklists in /Users/chosone/projects/vibe-ready/checklists and the rules in /Users/chosone/projects/vibe-ready/AGENTS.md.
+Use the checklists in Vibe Ready's `checklists/` directory and the rules in `AGENTS.md`.
 
 Prioritize:
 1. launch blockers
