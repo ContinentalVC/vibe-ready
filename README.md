@@ -104,6 +104,10 @@ See [checklists/launch-gates.md](checklists/launch-gates.md).
 - Making every app enterprise-ready
 - Encouraging process for its own sake
 
+## Acknowledgments
+
+See [ACKNOWLEDGMENTS.md](ACKNOWLEDGMENTS.md).
+
 ## License
 
 MIT. Change this before publishing if you want a different license.
