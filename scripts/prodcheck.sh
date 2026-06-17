@@ -2,6 +2,7 @@
 set -euo pipefail
 
 TARGET="${1:-.}"
+MAX_HISTORY_COMMITS="${VIBE_READY_HISTORY_COMMITS:-300}"
 
 if [ ! -d "$TARGET" ]; then
   echo "Target is not a directory: $TARGET" >&2
@@ -27,7 +28,13 @@ info() {
 }
 
 secret_pattern='sk_live_|pk_live_|AKIA[0-9A-Z]{16}|BEGIN RSA PRIVATE KEY|OPENAI_API_KEY=sk-|ANTHROPIC_API_KEY=sk-'
-secret_scan_file="${TMPDIR:-/tmp}/vibe-ready-secret-scan.txt"
+secret_scan_file="${TMPDIR:-/tmp}/vibe-ready-secret-scan-$$.txt"
+
+cleanup() {
+  rm -f "$secret_scan_file" "$secret_scan_file".err "$secret_scan_file".history "$secret_scan_file".history.err "$secret_scan_file".revs
+}
+
+trap cleanup EXIT
 
 has_any() {
   for path in "$@"; do
@@ -133,15 +140,21 @@ fi
 if command -v git >/dev/null 2>&1 && git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   : >"$secret_scan_file.history"
   : >"${secret_scan_file}.history.err"
+  git rev-list --all --max-count="$MAX_HISTORY_COMMITS" >"$secret_scan_file.revs"
+  scanned_revs="$(wc -l <"$secret_scan_file.revs" | tr -d ' ')"
+  total_revs="$(git rev-list --all --count)"
+  if [ "$total_revs" -gt "$scanned_revs" ]; then
+    info "Git history scan is bounded to the most recent $scanned_revs of $total_revs commits. Use VIBE_READY_HISTORY_COMMITS=<n> for a deeper scan, or use gitleaks/trufflehog for full forensics."
+  fi
   set +e
   history_scan_error=0
-  for rev in $(git rev-list --all); do
+  while IFS= read -r rev; do
     git grep -n -E "$secret_pattern" "$rev" -- . ':(exclude)scripts/prodcheck.sh' >>"$secret_scan_file.history" 2>>"${secret_scan_file}.history.err"
     git_grep_status=$?
     if [ "$git_grep_status" -gt 1 ]; then
       history_scan_error=1
     fi
-  done
+  done <"$secret_scan_file.revs"
   set -e
   if [ "$history_scan_error" -ne 0 ]; then
     warn "Git history secret scan failed; do not treat history as clean. Error:"

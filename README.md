@@ -49,6 +49,14 @@ Review this app for launch blockers, production risks, and missing safeguards.
 Return only actionable findings grouped by severity.
 ```
 
+`prodcheck.sh` scans the working tree and the most recent 300 git commits for high-signal secret patterns by default. For deeper local history scanning:
+
+```bash
+VIBE_READY_HISTORY_COMMITS=1000 ../vibe-ready/scripts/prodcheck.sh .
+```
+
+For full secret forensics, use a dedicated tool such as gitleaks or trufflehog.
+
 ## Repo Structure
 
 ```text
