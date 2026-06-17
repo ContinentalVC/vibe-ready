@@ -1,5 +1,7 @@
 # AI App Readiness Checklist
 
+Reference anchor: aligned with OWASP LLM Top 10 v2025 threat categories such as prompt injection, improper output handling, excessive agency, and unbounded consumption.
+
 Use this for apps that call LLMs, image/video models, transcription models, agents, MCP tools, or AI workflow APIs.
 
 ## Output Safety
@@ -7,8 +9,17 @@ Use this for apps that call LLMs, image/video models, transcription models, agen
 - [ ] Structured model outputs are schema-validated.
 - [ ] Invalid model output has retry or fallback behavior.
 - [ ] Raw model output is not piped directly into critical workflows.
+- [ ] LLM output reaching a database, browser, shell, workflow tool, or API is treated as untrusted input.
+- [ ] LLM-derived content uses parameterized queries, context-aware output encoding, and content security policy where applicable.
 - [ ] User-visible AI output has appropriate review or disclaimers for the domain.
 - [ ] Prompts and model versions are tracked.
+
+## Prompt Injection And Untrusted Context
+
+- [ ] Untrusted external content such as web pages, email, files, RAG documents, transcripts, and tool output is segregated from trusted instructions.
+- [ ] System/developer instructions explicitly constrain what the model may do with untrusted content.
+- [ ] Prompt-injection and jailbreak cases are included in the eval set and tested adversarially before release.
+- [ ] Retrieval, summarization, and tool-use flows assume prompt injection cannot be fully prevented and rely on layered controls.
 
 ## Cost Controls
 
@@ -33,6 +44,7 @@ Use this for apps that call LLMs, image/video models, transcription models, agen
 - [ ] Write tools require explicit scope and permission.
 - [ ] High-risk actions require human approval.
 - [ ] Tool parameters are validated.
+- [ ] Tool outputs are treated as untrusted context before being fed back to the model or rendered to users.
 - [ ] Tool failures are handled clearly.
 - [ ] Agent actions are logged.
 - [ ] Memory stores respect source permissions.

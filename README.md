@@ -84,6 +84,12 @@ vibe-ready/
 4. Fill out the launch and rollback templates.
 5. Re-run the review before release.
 
+## Standards Anchors
+
+The checklists are intentionally practical rather than exhaustive, but they are shaped by common production-readiness themes from OWASP Top 10 2021, OWASP LLM Top 10 v2025, OWASP ASVS-style controls, 12-Factor config discipline, cloud well-architected security/reliability guidance, and Google SRE production-readiness practices.
+
+These references are anchors for terminology and review scope, not a compliance claim.
+
 ## Launch Gates
 
 Use these default gates:

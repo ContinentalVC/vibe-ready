@@ -34,6 +34,7 @@ Required:
 - Structured error logging
 - Rollback plan
 - Rate limits on expensive endpoints
+- Expected beta traffic and support capacity are defined
 
 ## Public Beta
 
@@ -52,6 +53,7 @@ Required:
 - Feature flags or kill switches for risky features
 - AI cost controls if AI is exposed
 - Payment checklist if payments are live
+- Risky changes use staged or canary rollout where practical
 
 ## Production
 
@@ -63,6 +65,9 @@ Required:
 - Incident response owner defined
 - Auth, authorization, secrets, database, logging, and monitoring reviewed
 - Critical workflows tested with real-world edge cases
+- SLO or reliability target defined for critical workflows
+- Alerting fires when reliability is degrading or error budget is burning
+- Expected load and spike behavior tested or explicitly accepted as a risk
 - Post-launch monitoring plan
 
 ## Enterprise-Ready

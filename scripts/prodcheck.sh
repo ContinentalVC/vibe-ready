@@ -26,6 +26,9 @@ info() {
   echo "[INFO] $1"
 }
 
+secret_pattern='sk_live_|pk_live_|AKIA[0-9A-Z]{16}|BEGIN RSA PRIVATE KEY|OPENAI_API_KEY=sk-|ANTHROPIC_API_KEY=sk-'
+secret_scan_file="${TMPDIR:-/tmp}/vibe-ready-secret-scan.txt"
+
 has_any() {
   for path in "$@"; do
     if [ -e "$path" ]; then
@@ -49,6 +52,13 @@ fi
 
 if [ -f ".env" ]; then
   warn ".env exists in project root. Confirm it is gitignored and contains no committed secrets."
+  if command -v git >/dev/null 2>&1 && git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    if git ls-files --error-unmatch .env >/dev/null 2>&1; then
+      warn ".env is tracked by git. Remove it from git history and rotate any exposed secrets."
+    else
+      pass ".env is not tracked by git"
+    fi
+  fi
 fi
 
 if [ -f ".gitignore" ]; then
@@ -90,14 +100,58 @@ else
 fi
 
 if command -v rg >/dev/null 2>&1; then
-  if rg -n --hidden --glob '!node_modules' --glob '!.git' --glob '!dist' --glob '!build' --glob '!scripts/prodcheck.sh' 'sk_live_|pk_live_|AKIA[0-9A-Z]{16}|BEGIN RSA PRIVATE KEY|OPENAI_API_KEY=sk-|ANTHROPIC_API_KEY=sk-' . >/tmp/vibe-ready-secret-scan.txt 2>/dev/null; then
+  set +e
+  rg -n --hidden --glob '!node_modules' --glob '!.git' --glob '!dist' --glob '!build' --glob '!scripts/prodcheck.sh' "$secret_pattern" . >"$secret_scan_file" 2>"${secret_scan_file}.err"
+  scan_status=$?
+  set -e
+  if [ "$scan_status" -eq 0 ]; then
     warn "Possible secret patterns found:"
-    sed -n '1,20p' /tmp/vibe-ready-secret-scan.txt
-  else
+    sed -n '1,20p' "$secret_scan_file"
+  elif [ "$scan_status" -eq 1 ]; then
     pass "No obvious high-signal secret patterns found by lightweight scan"
+  else
+    warn "Secret scan failed; do not treat this as clean. Error:"
+    sed -n '1,10p' "${secret_scan_file}.err"
   fi
 else
-  warn "ripgrep not installed; skipped lightweight secret scan"
+  warn "ripgrep not installed; using slower grep fallback for lightweight secret scan"
+  set +e
+  grep -REn --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=build --exclude=prodcheck.sh "$secret_pattern" . >"$secret_scan_file" 2>"${secret_scan_file}.err"
+  scan_status=$?
+  set -e
+  if [ "$scan_status" -eq 0 ]; then
+    warn "Possible secret patterns found:"
+    sed -n '1,20p' "$secret_scan_file"
+  elif [ "$scan_status" -eq 1 ]; then
+    pass "No obvious high-signal secret patterns found by grep fallback"
+  else
+    warn "Grep secret scan failed; do not treat this as clean. Error:"
+    sed -n '1,10p' "${secret_scan_file}.err"
+  fi
+fi
+
+if command -v git >/dev/null 2>&1 && git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  : >"$secret_scan_file.history"
+  : >"${secret_scan_file}.history.err"
+  set +e
+  history_scan_error=0
+  for rev in $(git rev-list --all); do
+    git grep -n -E "$secret_pattern" "$rev" -- . ':(exclude)scripts/prodcheck.sh' >>"$secret_scan_file.history" 2>>"${secret_scan_file}.history.err"
+    git_grep_status=$?
+    if [ "$git_grep_status" -gt 1 ]; then
+      history_scan_error=1
+    fi
+  done
+  set -e
+  if [ "$history_scan_error" -ne 0 ]; then
+    warn "Git history secret scan failed; do not treat history as clean. Error:"
+    sed -n '1,10p' "${secret_scan_file}.history.err"
+  elif [ -s "$secret_scan_file.history" ]; then
+    warn "Possible secret patterns found in git history:"
+    sed -n '1,20p' "$secret_scan_file.history"
+  else
+    pass "No obvious high-signal secret patterns found in git history"
+  fi
 fi
 
 echo

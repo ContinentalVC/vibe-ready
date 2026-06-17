@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install ShellCheck
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+
+      - name: Shell syntax
+        run: bash -n scripts/prodcheck.sh
+
+      - name: ShellCheck
+        run: shellcheck scripts/prodcheck.sh
+
+      - name: Vibe Ready self-check
+        run: scripts/prodcheck.sh .

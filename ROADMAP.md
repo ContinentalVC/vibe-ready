@@ -9,11 +9,12 @@
 - [x] Launch gates
 - [x] Agent prompts for Codex, Claude Code, and Cursor
 - [x] Lightweight local check script
+- [x] Research-backed AI prompt-injection, data-protection, and SRE readiness additions
 
 ## v0.2
 
 - [ ] Add framework-specific notes for Next.js, Supabase, Firebase, Rails, Django, and Laravel.
-- [ ] Add CI examples for GitHub Actions.
+- [x] Add CI examples for GitHub Actions.
 - [ ] Add JSON/YAML checklist format for automated scoring.
 - [ ] Add examples of good and bad findings.
 - [ ] Add MCP/tool readiness checklist.
