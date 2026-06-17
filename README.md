@@ -1,19 +1,19 @@
 # Vibe Ready
 
-Production-readiness toolkit for AI-built and vibe-coded apps.
+**Production-readiness checks for AI-built and vibe-coded apps.** Ship the prototype, not the incident.
 
-Vibe Ready helps you take a fast prototype from tools like Claude Code, Codex, Cursor, Lovable, Bolt, v0, Replit, or similar agentic builders and check whether it is actually safe to launch.
+AI coding tools - Claude Code, Codex, Cursor, Lovable, Bolt, v0, Replit - get you to a working demo in an afternoon. What they don't tell you is when that demo is safe to put in front of real users, real data, or real money. Vibe Ready is the checklist that lives between "it works on my screen" and "it's live."
 
-This repo is intentionally lightweight:
+It is a lightweight, agent-native toolkit you drop into any project:
 
-- Agent-readable instructions
-- Production checklists
-- Launch gates by risk level
-- Review prompts for Claude/Codex/Cursor
-- Local shell checks for common footguns
-- Templates for rollback, incidents, env vars, and launch plans
+- **Checklists** - auth, secrets, payments, AI/LLM safety, multi-tenancy, and launch gates
+- **Agent prompts** - so Claude Code, Codex, or Cursor run the review for you
+- **A local scanner** - `prodcheck.sh` catches the usual footguns: committed secrets, untracked `.env`, missing migrations
+- **Templates** - rollback, incident response, env vars, risk register, launch plan
 
-It is not a framework, SaaS platform, or compliance certification.
+It is not a framework, a SaaS platform, or a compliance certification. The checklists are anchored to OWASP (Top 10, LLM Top 10 v2025), Google SRE, 12-Factor, and cloud well-architected guidance - practical review scope, not a standards-compliance claim.
+
+**See it in action:** [a sample review of a vibe-coded SaaS app ->](examples/sample-review.md)
 
 ## The Core Idea
 
@@ -31,7 +31,7 @@ Vibe Ready gives human builders and coding agents a shared definition of "ready"
 - Payments, webhooks, and tenant boundaries are reviewed.
 - Risky changes have human approval gates.
 
-## Quick Start
+## 30-Second Start
 
 Copy or reference this repo from the project you want to review:
 
@@ -82,6 +82,9 @@ vibe-ready/
     risk-register.md
   scripts/
     prodcheck.sh
+  examples/
+    sample-review.md
+    launch-post.md
 ```
 
 ## Suggested Workflow
