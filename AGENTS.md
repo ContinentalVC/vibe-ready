@@ -6,7 +6,7 @@ Be direct. Prioritize bugs, security risks, missing safeguards, and launch block
 
 ## Review Order
 
-1. Read the target project's README, package manifests, env examples, deployment config, database migrations, auth code, API routes, payment code, AI/model code, and tests.
+1. Read the target project's README, package manifests, lockfiles, env examples, deployment config, database migrations, auth/session/token code, API routes, service-to-service auth, object storage/upload code, cache code, payment code, AI/model code, observability config, and tests.
 2. Run `scripts/prodcheck.sh <target-project>` if shell access is available.
 3. Apply the checklists in this order:
    - `checklists/production-readiness.md`
@@ -53,8 +53,14 @@ Missing Context
 - Do not invent facts. If you cannot verify something, say so.
 - Treat missing evidence as a risk, not as proof of absence.
 - Separate authentication from authorization.
+- Separate user auth from service-to-service auth.
 - Check whether user A can access user B's data.
 - Check whether secrets can reach the frontend.
+- Check whether JWT/session validation pins algorithms, issuer, audience, expiration, and trusted keys.
+- Check whether CORS, CSP, cookies, and browser security headers match the app's actual threat model.
+- Check whether dependencies are locked, scanned, and justified.
+- Check whether user files are stored and served through the right storage path with the right permissions.
+- Check whether cache invalidation protects auth, entitlements, billing, pricing, inventory, and other critical user-visible data.
 - Check unhappy paths, not only the happy demo path.
 - Flag any PR touching auth, payments, data deletion, permissions, secrets, migrations, tenant isolation, or production config.
 - For AI features, require output validation, cost controls, fallbacks, evals or test cases, and rate limits.

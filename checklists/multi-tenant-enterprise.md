@@ -17,12 +17,17 @@ Use this when the app has teams, organizations, workspaces, customers, accounts,
 - [ ] Former users lose access immediately.
 - [ ] Sensitive exports require permission checks.
 - [ ] API keys or service accounts are scoped to a tenant where applicable.
+- [ ] Enterprise SSO/SAML/OIDC requirements are implemented or explicitly out of scope.
+- [ ] Organization membership, domain capture, and account takeover edge cases are tested where applicable.
 
 ## Enterprise Evidence
 
 - [ ] Audit logs cover sensitive actions.
+- [ ] Audit logs identify actor, tenant, target object, timestamp, IP/user agent where appropriate, and before/after state for critical changes.
 - [ ] Backup and restore process is documented.
+- [ ] Restore has been tested and evidence is available for customer or auditor review where enterprise sales require it.
 - [ ] Incident response process exists.
 - [ ] Data deletion and export processes exist.
 - [ ] Privacy policy and terms are present.
 - [ ] Security contact or support process is defined.
+- [ ] SOC 2, security questionnaire, DPA, subprocessors, and vulnerability management expectations are either supported or recorded as not yet available.

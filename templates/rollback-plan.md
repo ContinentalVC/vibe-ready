@@ -7,7 +7,9 @@
 - Payment failures:
 - Security issue:
 - Data integrity issue:
+- Stale cache or entitlement issue:
 - AI cost spike:
+- Cloud cost spike:
 
 ## Rollback Steps
 
@@ -19,6 +21,8 @@
 
 - Migrations to revert:
 - Data backfill needed:
+- Cache purge or revalidation needed:
+- Object storage or CDN changes to revert:
 - User-visible impact:
 
 ## Owners

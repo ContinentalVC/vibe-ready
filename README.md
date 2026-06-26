@@ -8,7 +8,7 @@ It is a lightweight, agent-native toolkit you drop into any project:
 
 - **Checklists** - auth, secrets, payments, AI/LLM safety, multi-tenancy, and launch gates
 - **Agent prompts** - so Claude Code, Codex, or Cursor run the review for you
-- **A local scanner** - `prodcheck.sh` catches the usual footguns: committed secrets, untracked `.env`, missing migrations
+- **A local scanner** - `prodcheck.sh` catches the usual footguns: committed secrets, untracked `.env`, missing migrations, missing lockfiles
 - **Templates** - rollback, incident response, env vars, risk register, launch plan
 
 It is not a framework, a SaaS platform, or a compliance certification. The checklists are anchored to OWASP (Top 10, LLM Top 10 v2025), Google SRE, 12-Factor, and cloud well-architected guidance - practical review scope, not a standards-compliance claim.
@@ -26,6 +26,7 @@ Vibe Ready gives human builders and coding agents a shared definition of "ready"
 - Database changes use migrations.
 - Backups and rollback are planned.
 - Logs and monitoring exist.
+- Dependency, cache, upload, storage, and browser-security risks are reviewed.
 - AI outputs are validated.
 - Costs and rate limits are controlled.
 - Payments, webhooks, and tenant boundaries are reviewed.
@@ -49,7 +50,7 @@ Review this app for launch blockers, production risks, and missing safeguards.
 Return only actionable findings grouped by severity.
 ```
 
-`prodcheck.sh` scans the working tree and the most recent 300 git commits for high-signal secret patterns by default. For deeper local history scanning:
+`prodcheck.sh` scans the working tree and the most recent 300 git commits for high-signal secret patterns by default. It also checks for common dependency manifests, lockfiles, environment examples, migrations, tests, and payment/AI indicators. For deeper local history scanning:
 
 ```bash
 VIBE_READY_HISTORY_COMMITS=1000 ../vibe-ready/scripts/prodcheck.sh .

@@ -16,6 +16,9 @@ What happened:
 - Users affected:
 - Data affected:
 - Payments affected:
+- Entitlements/auth affected:
+- Cache or stale-data impact:
+- Cost impact:
 - Security impact:
 
 ## Timeline
@@ -37,3 +40,4 @@ What happened:
 - What failed:
 - What worked:
 - What to monitor next:
+- What runbook or checklist should change:

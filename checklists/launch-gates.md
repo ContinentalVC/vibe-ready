@@ -35,6 +35,8 @@ Required:
 - Rollback plan
 - Rate limits on expensive endpoints
 - Expected beta traffic and support capacity are defined
+- Dependency lockfiles are committed where applicable
+- Object storage permissions are reviewed for user-uploaded files
 
 ## Public Beta
 
@@ -49,11 +51,13 @@ Required:
 - Safe user-facing errors
 - Secret scanning
 - Dependency scanning
+- A basic dynamic security scan or equivalent manual web security pass has been run against the deployed app
 - Tested unhappy paths
 - Feature flags or kill switches for risky features
 - AI cost controls if AI is exposed
 - Payment checklist if payments are live
 - Risky changes use staged or canary rollout where practical
+- Cache invalidation and stale-data behavior are reviewed for user-visible, billing, auth, and entitlement data
 
 ## Production
 
@@ -64,10 +68,12 @@ Required:
 - Backups and restore tested
 - Incident response owner defined
 - Auth, authorization, secrets, database, logging, and monitoring reviewed
+- Supply chain, file storage, caching, browser security headers, and service-to-service auth reviewed where applicable
 - Critical workflows tested with real-world edge cases
 - SLO or reliability target defined for critical workflows
 - Alerting fires when reliability is degrading or error budget is burning
 - Expected load and spike behavior tested or explicitly accepted as a risk
+- Cloud cost attribution and budget alerts exist for the expected launch footprint
 - Post-launch monitoring plan
 
 ## Enterprise-Ready
@@ -77,8 +83,9 @@ Required:
 - Tenant isolation model documented
 - Audit logs for sensitive actions
 - Role-based access control
+- Enterprise auth requirements such as SSO, SAML/OIDC, SCIM, domain capture, and session policies are implemented or explicitly out of scope
 - Data deletion process
 - Privacy policy and terms
 - Incident response process
-- Evidence for backups, restores, monitoring, access control, and security practices
+- Evidence for backups, restores, monitoring, access control, security practices, and vulnerability management
 - Support and escalation path

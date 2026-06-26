@@ -23,15 +23,23 @@ Blockers
 
 High
 
+- [token-security] JWT verification trusts the token header algorithm instead of pinning the expected algorithm and issuer/audience. Evidence: lib/auth/jwt.ts calls `jwt.verify(token, key)` with no `algorithms`, `issuer`, or `audience` options. A misconfigured key path can become a token-forgery issue. Fix: pin the allowed algorithm, validate issuer/audience/expiration, and load keys only from trusted configuration. (checklists/auth-security.md -> Tokens And Service Auth)
+
 - [authentication] No rate limit on login or password reset. Evidence: app/api/auth/* has no limiter; reset tokens never expire (no `expires_at` checked). Fix: rate-limit auth endpoints and expire reset tokens. (checklists/auth-security.md -> Authentication)
+
+- [supply-chain] JavaScript dependencies are not locked. Evidence: `package.json` exists but there is no `package-lock.json`, `pnpm-lock.yaml`, `yarn.lock`, or `bun.lockb`; prodcheck.sh warns that production installs are not deterministic. Fix: commit the package-manager lockfile and use frozen-lockfile installs in CI and production. (checklists/production-readiness.md -> Dependencies And Supply Chain)
 
 - [ai-safety] No spend ceiling on the extraction endpoint. Evidence: /api/extract calls the model per uploaded page with no per-user quota, no provider spend cap, and no input size limit - a single user can upload a 500-page PDF in a loop. This is OWASP LLM10 "Denial of Wallet." Fix: per-user quotas, a provider budget alert, and an input-size cap. (checklists/ai-app-readiness.md -> Cost Controls)
 
 - [observability] Errors are swallowed; there is no monitoring. Evidence: most catch blocks `console.log(e)` and return 200. No error tracker, no uptime/latency alerting. You will learn about outages from customers. Fix: add structured error logging and one actionable alert on elevated error rate. (checklists/production-readiness.md -> Observability)
 
+- [cache] Paid entitlements are cached for 30 minutes and payment webhooks do not invalidate the cache. Evidence: lib/entitlements.ts uses `cache.set(userId, plan, 1800)`; app/api/webhooks/stripe/route.ts updates the subscription row but never purges or revalidates that key. Canceled or upgraded users can see stale access. Fix: invalidate entitlement cache from webhook events and consider stale-while-revalidate only for non-critical reads. (checklists/production-readiness.md -> Caching And Consistency)
+
 Medium
 
 - [database] Migrations are not version-controlled and one drops a column in the same deploy as the code that stops using it. Evidence: schema changes were applied by hand in the Supabase console; the `legacy_total` drop ships with the refactor that reads `total`. A rollback would break the running version. Fix: commit migrations and split destructive changes into expand-contract steps. (checklists/production-readiness.md -> Database)
+
+- [file-storage] Uploaded receipts are stored as base64 blobs in the primary database. Evidence: `receipts.image_data` is a text column containing the uploaded file body; there is no object storage bucket or signed URL flow. This inflates database size and makes backup/restore slower. Fix: move file bodies to private object storage and keep metadata, owner, and object key in the database. (checklists/production-readiness.md -> Files And Object Storage)
 
 - [reliability] No fallback when the model provider is slow or down. Evidence: /api/extract awaits the provider with no timeout; the upload UI hangs indefinitely on a provider incident. Fix: set a timeout and degrade to "extraction pending." (checklists/ai-app-readiness.md -> Reliability)
 
@@ -41,7 +49,9 @@ Low
 
 - [deployment] Deploys go straight from a laptop to production with no preview environment. Evidence: README "deploy" step is `vercel --prod`. Fix: add a preview/staging deploy and a documented rollback. (checklists/production-readiness.md -> Deployment)
 
-- [data-protection] Uploaded receipts (PII) are stored in a public storage bucket. Evidence: Supabase bucket `receipts` is set to public-read. Fix: make the bucket private and serve via signed URLs. (checklists/production-readiness.md -> Data Protection)
+- [data-protection] Generated invoice PDFs with customer details are stored in a public storage bucket. Evidence: Supabase bucket `invoice-pdfs` is set to public-read. Fix: make the bucket private and serve via signed URLs. (checklists/production-readiness.md -> Data Protection)
+
+- [operations] Only the original builder knows how to restore a failed deploy or purge bad cache entries. Evidence: README has setup instructions but no rollback, cache purge, or incident runbook. Fix: fill out the Vibe Ready rollback and incident templates with owners and verification steps. (checklists/production-readiness.md -> Documentation And Operations)
 
 Accepted Assumptions
 

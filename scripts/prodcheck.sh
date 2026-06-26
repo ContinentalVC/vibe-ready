@@ -51,6 +51,30 @@ else
   warn "No common dependency manifest found"
 fi
 
+if [ -f "package.json" ]; then
+  if has_any package-lock.json npm-shrinkwrap.json pnpm-lock.yaml yarn.lock bun.lock bun.lockb; then
+    pass "JavaScript lockfile found"
+  else
+    warn "package.json found without a common JavaScript lockfile. Confirm production installs are deterministic."
+  fi
+fi
+
+if [ -f "pyproject.toml" ]; then
+  if has_any uv.lock poetry.lock pdm.lock; then
+    pass "Python project lockfile found"
+  else
+    info "pyproject.toml found without uv.lock/poetry.lock/pdm.lock. Confirm dependency versions are pinned elsewhere."
+  fi
+fi
+
+if [ -f "requirements.txt" ]; then
+  if grep -Eq '^[A-Za-z0-9_.-]+==' requirements.txt; then
+    pass "requirements.txt appears to pin at least one dependency"
+  else
+    warn "requirements.txt does not appear to pin dependencies with ==. Confirm production installs are deterministic."
+  fi
+fi
+
 if has_any .env.example .env.sample .env.template templates/env.example; then
   pass "Environment example found"
 else
