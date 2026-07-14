@@ -19,6 +19,9 @@ Use this when the app has teams, organizations, workspaces, customers, accounts,
 - [ ] API keys or service accounts are scoped to a tenant where applicable.
 - [ ] Enterprise SSO/SAML/OIDC requirements are implemented or explicitly out of scope.
 - [ ] Organization membership, domain capture, and account takeover edge cases are tested where applicable.
+- [ ] Minimal data permissions are enforced via RBAC. Users have access only to the information and resources necessary for their roles.
+- [ ] Data lifecycle management is defined: permissions granted during development are revoked when data goes live; data access is auditable and time-bounded where appropriate.
+- [ ] Sensitive data desensitization or anonymization is applied when sharing data externally or across tenants.
 
 ## Enterprise Evidence
 

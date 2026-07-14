@@ -13,6 +13,7 @@ Use this for apps that call LLMs, image/video models, transcription models, agen
 - [ ] LLM-derived content uses parameterized queries, context-aware output encoding, and content security policy where applicable.
 - [ ] User-visible AI output has appropriate review or disclaimers for the domain.
 - [ ] Prompts and model versions are tracked.
+- [ ] Content moderation is applied to both user input and model output before user exposure. Input moderation filters inappropriate requests; output moderation filters unsafe, biased, or harmful responses. Moderation failures fall back to safe template responses rather than exposing unfiltered content.
 
 ## Prompt Injection And Untrusted Context
 

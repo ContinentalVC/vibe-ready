@@ -13,11 +13,13 @@
 
 ## v0.2
 
-- [ ] Add framework-specific notes for Next.js, Supabase, Firebase, Rails, Django, and Laravel.
+- [ ] Add framework-specific notes for Next.js, Supabase, Firebase, Rails, Django, and Laravel. (N/A — stack-agnostic approach chosen)
 - [x] Add CI examples for GitHub Actions.
 - [ ] Add JSON/YAML checklist format for automated scoring.
 - [ ] Add examples of good and bad findings.
 - [ ] Add MCP/tool readiness checklist.
+- [x] Add staged maturity model with gated launch checks.
+- [x] Add stack-agnostic project structure template.
 
 ## v0.3
 

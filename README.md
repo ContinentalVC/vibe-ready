@@ -6,10 +6,10 @@ AI coding tools - Claude Code, Codex, Cursor, Lovable, Bolt, v0, Replit - get yo
 
 It is a lightweight, agent-native toolkit you drop into any project:
 
-- **Checklists** - auth, secrets, payments, AI/LLM safety, multi-tenancy, and launch gates
+- **Checklists** - auth, secrets, payments, AI/LLM safety, multi-tenancy, and launch gates (staged by maturity)
 - **Agent prompts** - so Claude Code, Codex, or Cursor run the review for you
 - **A local scanner** - `prodcheck.sh` catches the usual footguns: committed secrets, untracked `.env`, missing migrations, missing lockfiles
-- **Templates** - rollback, incident response, env vars, risk register, launch plan
+- **Templates** - rollback, incident response, env vars, risk register, launch plan, and project structure
 
 It is not a framework, a SaaS platform, or a compliance certification. The checklists are anchored to OWASP (Top 10, LLM Top 10 v2025), Google SRE, 12-Factor, and cloud well-architected guidance - practical review scope, not a standards-compliance claim.
 
@@ -81,6 +81,7 @@ vibe-ready/
     rollback-plan.md
     incident-response.md
     risk-register.md
+    project-structure.md
   scripts/
     prodcheck.sh
   examples/
@@ -91,10 +92,11 @@ vibe-ready/
 ## Suggested Workflow
 
 1. Run `scripts/prodcheck.sh` against the target project.
-2. Have Claude/Codex/Cursor perform a checklist-based review.
-3. Classify findings as launch blockers, pre-launch fixes, post-launch hardening, or accepted risks.
-4. Fill out the launch and rollback templates.
-5. Re-run the review before release.
+2. Tell your agent what stage the project is at (Prototype, Private Beta, Public Beta, Production, or Enterprise). Only the checks relevant to that stage will be flagged as blockers; everything else appears as a recommendation with a timeline.
+3. Have Claude/Codex/Cursor perform a checklist-based review.
+4. Classify findings as launch blockers, pre-launch fixes, post-launch hardening, or accepted risks.
+5. Fill out the launch and rollback templates.
+6. Re-run the review before release.
 
 ## Standards Anchors
 
@@ -104,7 +106,9 @@ These references are anchors for terminology and review scope, not a compliance 
 
 ## Launch Gates
 
-Use these default gates:
+Reviews are scoped to the project's current stage — not everything is required from day 1. The maturity matrix in `checklists/launch-gates.md` maps each checklist domain to the stage where it first becomes required.
+
+Default gates:
 
 - **Prototype:** local demo only; no real users or sensitive data.
 - **Private beta:** trusted users; logs, backups, auth, and rollback exist.

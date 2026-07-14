@@ -7,15 +7,25 @@ Be direct. Prioritize bugs, security risks, missing safeguards, and launch block
 ## Review Order
 
 1. Read the target project's README, package manifests, lockfiles, env examples, deployment config, database migrations, auth/session/token code, API routes, service-to-service auth, object storage/upload code, cache code, payment code, AI/model code, observability config, and tests.
-2. Run `scripts/prodcheck.sh <target-project>` if shell access is available.
-3. Apply the checklists in this order:
+2. **Determine project stage.** Ask the user which stage the target project is at:
+   - **Prototype** — local demo; no real users or sensitive data.
+   - **Private Beta** — trusted users; limited exposure.
+   - **Public Beta** — open signups; public-facing.
+   - **Production** — live with real users, data, and/or payments.
+   - **Enterprise** — multi-tenant with org-level access controls and compliance needs.
+
+   Use the maturity matrix in `checklists/launch-gates.md` to apply only the checklist items required for that stage. Flag higher-stage items as **recommendations with a timeline**, not as blockers.
+
+   If the project is brand new (no `src/` or equivalent directory), reference `templates/project-structure.md` for a recommended starting layout.
+3. Run `scripts/prodcheck.sh <target-project>` if shell access is available.
+4. Apply the checklists in this order, scoped to the project's stage:
+   - `checklists/launch-gates.md` — use the maturity matrix to determine scope
    - `checklists/production-readiness.md`
    - `checklists/auth-security.md`
-   - `checklists/ai-app-readiness.md`
+   - `checklists/ai-app-readiness.md` if AI features exist
    - `checklists/payment-readiness.md` if payments exist
    - `checklists/multi-tenant-enterprise.md` if accounts, teams, orgs, or tenants exist
-   - `checklists/launch-gates.md`
-4. Return findings by severity.
+5. Return findings by severity.
 
 ## Severity
 

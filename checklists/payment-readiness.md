@@ -1,6 +1,6 @@
 # Payment Readiness Checklist
 
-Use this for Stripe, Paddle, Lemon Squeezy, in-app purchases, invoices, credits, subscriptions, or any money movement.
+Use this for Stripe, Paddle, Lemon Squeezy, in-app purchases, invoices, credits, subscriptions, QR payments, digital wallets, or any money movement.
 
 ## Launch Blockers
 
@@ -26,6 +26,12 @@ Use this for Stripe, Paddle, Lemon Squeezy, in-app purchases, invoices, credits,
 - [ ] Entitlements update on cancellation, refund, dispute, failed renewal, and plan change.
 - [ ] Users cannot change plan, price, quantity, or customer IDs from the client.
 - [ ] Coupons, trials, credits, and upgrades are tested.
+
+## Payment Ecosystem Awareness
+
+- [ ] The payment flow correctly handles the roles of cardholder, merchant, payment gateway, payment processor, acquiring bank, card network (e.g., Visa, Mastercard), and issuing bank. Each entity's responsibilities and fees (merchant discount fee, interchange fee, network assessments) are understood.
+- [ ] Idempotency is enforced beyond payments: order submissions prevent duplicate orders, user registrations prevent duplicate accounts, password resets produce a single reset action, and queue-message reprocessing has no side effects.
+- [ ] QR-code or digital wallet payment flows (e.g., scan-to-pay) validate the payment amount, mark the payment as paid atomically to prevent double-payment, and notify both consumer and merchant of the payment outcome.
 
 ## Testing
 

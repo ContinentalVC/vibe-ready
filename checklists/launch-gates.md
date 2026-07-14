@@ -2,7 +2,42 @@
 
 Use the lowest gate that matches the actual exposure of the app.
 
-## Prototype
+## Maturity Matrix
+
+Not everything is required from day 1. Use this matrix to determine which checklist domains are required at each stage. Items appear at the stage where they first become required and cascade to all higher stages.
+
+| Domain | Prototype | Private Beta | Public Beta | Production | Enterprise |
+|--------|:----------:|:------------:|:-----------:|:----------:|:----------:|
+| Auth (login, sessions) | | ✅ | ✅ | ✅ | ✅ |
+| Authorization (permissions, ownership) | | ✅ | ✅ | ✅ | ✅ |
+| Secrets management (no committed keys) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Database migrations | | ✅ | ✅ | ✅ | ✅ |
+| Backups & rollback plan | | ✅ | ✅ | ✅ | ✅ |
+| Safe user-facing errors | | ✅ | ✅ | ✅ | ✅ |
+| Rate limiting (expensive endpoints) | | ✅ | ✅ | ✅ | ✅ |
+| Dependency lockfiles | | ✅ | ✅ | ✅ | ✅ |
+| Monitoring & alerting | | | ✅ | ✅ | ✅ |
+| Secret / dependency scanning | | | ✅ | ✅ | ✅ |
+| Security scan (DAST or manual) | | | ✅ | ✅ | ✅ |
+| Cache invalidation (auth, billing, entitlements) | | | ✅ | ✅ | ✅ |
+| AI output validation & safety | | | ✅ if AI | ✅ | ✅ |
+| AI cost controls | | | ✅ if AI | ✅ | ✅ |
+| Payment idempotency & webhook verification | | | ✅ if pay | ✅ | ✅ |
+| Feature flags / kill switches | | | ✅ | ✅ | ✅ |
+| DevSecOps in CI | | | ✅ | ✅ | ✅ |
+| Load / stress testing | | | | ✅ | ✅ |
+| DR strategy (RTO / RPO) | | | | ✅ | ✅ |
+| SLO / error budgets | | | | ✅ | ✅ |
+| Cloud cost attribution & alerts | | | | ✅ | ✅ |
+| Incident response process | | | | ✅ | ✅ |
+| Tenant isolation | | | | | ✅ |
+| Audit logs (sensitive actions) | | | | | ✅ |
+| Enterprise auth (SSO / SAML / SCIM) | | | | | ✅ |
+| Data deletion / export process | | | | | ✅ |
+
+**How to use:** Determine the project's current stage. Apply only the checked items for that stage and below. Flag unchecked items at higher stages as recommendations with a timeline, not as blockers.
+
+## Gates in Detail
 
 Allowed:
 
@@ -58,6 +93,9 @@ Required:
 - Payment checklist if payments are live
 - Risky changes use staged or canary rollout where practical
 - Cache invalidation and stale-data behavior are reviewed for user-visible, billing, auth, and entitlement data
+- Core production components are in place: CI/CD pipeline, DNS, load balancer, CDN (if static assets), API gateway, backend services, database, cache, full-text search (if needed), job queue (if async tasks), log aggregation, metrics, and alerting
+- API testing covers at minimum smoke, functional, and security test types
+- DevSecOps practices are integrated: automated security checks in CI, container scanning, secret management, and vulnerability management
 
 ## Production
 
@@ -75,6 +113,8 @@ Required:
 - Expected load and spike behavior tested or explicitly accepted as a risk
 - Cloud cost attribution and budget alerts exist for the expected launch footprint
 - Post-launch monitoring plan
+- Disaster recovery strategy is defined with concrete RTO and RPO targets and has been tested
+- System design pillars are documented: scalability approach, availability target (e.g., "4 nines"), reliability expectations, and performance budgets under peak load
 
 ## Enterprise-Ready
 

@@ -3,6 +3,17 @@ set -euo pipefail
 
 TARGET="${1:-.}"
 MAX_HISTORY_COMMITS="${VIBE_READY_HISTORY_COMMITS:-300}"
+STAGE=""
+
+# Parse optional --stage flag
+if [[ "$1" == --stage ]]; then
+  STAGE="${2:-}"
+  TARGET="${3:-.}"
+  if [ -z "$STAGE" ]; then
+    echo "Usage: prodcheck.sh --stage <prototype|private-beta|public-beta|production|enterprise> [target]" >&2
+    exit 1
+  fi
+fi
 
 if [ ! -d "$TARGET" ]; then
   echo "Target is not a directory: $TARGET" >&2
@@ -13,6 +24,13 @@ cd "$TARGET"
 
 echo "Vibe Ready local checks"
 echo "Target: $(pwd)"
+
+if [ -n "$STAGE" ]; then
+  echo "Reviewing against: ${STAGE} gate"
+  echo "See checklists/launch-gates.md maturity matrix for items required at this stage."
+else
+  echo "No --stage specified; showing all checks. Agent should determine stage from user."
+fi
 echo
 
 warn() {
@@ -128,6 +146,25 @@ if find . -maxdepth 5 \
   info "AI/agent-related files found. Apply checklists/ai-app-readiness.md"
 else
   info "No obvious AI/agent files found"
+fi
+
+if find . -maxdepth 4 -type f \( -iname "dockerfile" -o -iname "docker-compose.yml" -o -iname "docker-compose.yaml" \) | grep -q .; then
+  pass "Docker configuration found"
+else
+  info "No Docker configuration found"
+fi
+
+if find . -maxdepth 4 -type f \( -iname "*.graphql" -o -iname "schema.graphqls" -o -iname "gqlconfig*" \) | grep -q .; then
+  info "GraphQL schema files found. Review query depth limits, complexity scoring, and abuse prevention."
+else
+  info "No GraphQL schema files found"
+fi
+
+if find . -maxdepth 4 \( -iname "kubernetes" -o -iname "k8s" -o -iname "*.k8s.yaml" -o -iname "*.k8s.yml" \) -type d -o \
+  -type f \( -iname "kustomization.yaml" -o -iname "deployment.yaml" -o -iname "deployment.yml" \) | grep -q .; then
+  info "Kubernetes configuration found. Review resource limits, liveness/readiness probes, and network policies."
+else
+  info "No Kubernetes configuration found"
 fi
 
 if command -v rg >/dev/null 2>&1; then
