@@ -13,7 +13,7 @@ Use this for apps that call LLMs, image/video models, transcription models, agen
 - [ ] LLM-derived content uses parameterized queries, context-aware output encoding, and content security policy where applicable.
 - [ ] User-visible AI output has appropriate review or disclaimers for the domain.
 - [ ] Prompts and model versions are tracked.
-- [ ] Content moderation is applied to both user input and model output before user exposure. Input moderation filters inappropriate requests; output moderation filters unsafe, biased, or harmful responses. Moderation failures fall back to safe template responses rather than exposing unfiltered content.
+- [ ] Input/output moderation and policy enforcement match the product's users, content, domain, and abuse model. When moderation is required, provider failure or timeout has an explicit fail-open or fail-closed decision and does not silently expose content outside the product policy.
 
 ## Prompt Injection And Untrusted Context
 
@@ -22,6 +22,16 @@ Use this for apps that call LLMs, image/video models, transcription models, agen
 - [ ] Prompt-injection and jailbreak cases are included in the eval set and tested adversarially before release.
 - [ ] Retrieval, summarization, and tool-use flows assume prompt injection cannot be fully prevented and rely on layered controls.
 
+## Retrieval And RAG
+
+- [ ] Retrieval enforces source permissions at query time and prevents cross-user or cross-tenant results; filtering only after retrieval is not accepted for sensitive content.
+- [ ] Answers retain source provenance and, where the product requires factual grounding, expose citations or evidence that can be traced to the retrieved chunks.
+- [ ] Ingestion, chunking, embedding, metadata, reranker, and retrieval configurations are versioned. Reindex and rollback behavior is defined when any component changes.
+- [ ] Source updates, permission changes, retention rules, and deletions propagate to chunks, embeddings, caches, replicas, and backups according to the data-lifecycle plan.
+- [ ] Retrieval quality is evaluated separately from generation quality using representative queries and failure cases, including missing, stale, conflicting, poisoned, or permission-restricted sources.
+- [ ] Low-confidence or no-result retrieval has a safe response path and does not encourage the model to fill gaps from unsupported memory.
+- [ ] Retrieved documents remain untrusted data: embedded instructions cannot expand tool permissions, override system rules, or cause secret/data exfiltration.
+
 ## Cost Controls
 
 - [ ] AI endpoints require auth where appropriate.
@@ -29,7 +39,7 @@ Use this for apps that call LLMs, image/video models, transcription models, agen
 - [ ] Provider spend caps or alerts are configured.
 - [ ] Expensive endpoints have rate limits.
 - [ ] Repeated prompts or expensive context are cached where practical.
-- [ ] Smaller/cheaper models are used for simple classification, extraction, formatting, and summaries.
+- [ ] Model choice is justified by measured quality, safety, latency, and cost for the task; smaller or cheaper models are considered when they meet the requirement.
 
 ## Reliability
 
@@ -38,6 +48,7 @@ Use this for apps that call LLMs, image/video models, transcription models, agen
 - [ ] Backup model/provider or graceful degradation exists for critical paths.
 - [ ] Long-running AI tasks use background jobs where needed.
 - [ ] Failed AI jobs are visible to operators.
+- [ ] Custom or fine-tuned model workflows track dataset/feature lineage, experiment runs, validation results, registry stage, deployment version, rollback target, and production drift where applicable.
 
 ## Agent And Tool Safety
 
@@ -49,6 +60,14 @@ Use this for apps that call LLMs, image/video models, transcription models, agen
 - [ ] Tool failures are handled clearly.
 - [ ] Agent actions are logged.
 - [ ] Memory stores respect source permissions.
+
+## Human Escalation
+
+- [ ] Automated support and agent flows define when to stop, disclose uncertainty, and hand off to a human.
+- [ ] Billing disputes, access-control conflicts, security reports, privacy requests, safety issues, and other consequential or contested outcomes cannot be closed solely because an AI found no matching system error.
+- [ ] Human reviewers receive the relevant case history, model/tool actions, source evidence, and safe administrative controls needed to resolve the issue.
+- [ ] Customers can reach a human through a documented path when automation fails or repeatedly misunderstands the request.
+- [ ] Human overrides are authorized, audited, and fed back into playbooks or eval cases without storing unnecessary sensitive content.
 
 ## Evaluation
 

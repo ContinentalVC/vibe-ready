@@ -20,11 +20,16 @@
 - [ ] Add MCP/tool readiness checklist.
 - [x] Add staged maturity model with gated launch checks.
 - [x] Add stack-agnostic project structure template.
+- [x] Add customer/business operations checklist, data-lifecycle plan, and postmortem template.
+- [x] Add a beginner-first quick path with plain-language stages and progressive disclosure.
+- [x] Add stage-aware scanner results, JSON output, opt-in strict mode, and behavioral fixture tests.
+- [x] Add architecture-decision, dependency-resilience, and delivery-health templates.
+- [x] Add a primary-source map for architecture, reliability, security, AI, and delivery guidance.
 
 ## v0.3
 
-- [ ] Add a real CLI wrapper.
-- [ ] Add machine-readable launch gate reports.
+- [ ] Add a cross-platform CLI wrapper beyond the current Bash interface.
+- [ ] Expand machine-readable scanner output into complete manual + automated launch-gate reports.
 - [ ] Add optional SARIF output for code scanning tools.
 - [ ] Add sample pull request review workflow.
 - [ ] Add docs site if the repo needs it.
