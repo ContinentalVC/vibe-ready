@@ -6,6 +6,8 @@
 - Reporter:
 - Severity:
 - Systems affected:
+- Incident commander / owner:
+- Customer-support owner:
 
 ## Summary
 
@@ -34,6 +36,7 @@ What happened:
 - Follow-up fix:
 - Owner:
 - Due date:
+- Postmortem owner and review date:
 
 ## Lessons
 
@@ -41,3 +44,5 @@ What happened:
 - What worked:
 - What to monitor next:
 - What runbook or checklist should change:
+- Which customer/support signals should become monitoring:
+- Link to completed postmortem:

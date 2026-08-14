@@ -17,10 +17,16 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y shellcheck
 
       - name: Shell syntax
-        run: bash -n scripts/prodcheck.sh
+        run: bash -n scripts/prodcheck.sh && bash -n tests/prodcheck_test.sh
 
       - name: ShellCheck
-        run: shellcheck scripts/prodcheck.sh
+        run: shellcheck scripts/prodcheck.sh tests/prodcheck_test.sh
 
       - name: Vibe Ready self-check
         run: scripts/prodcheck.sh .
+
+      - name: Scanner behavior tests
+        run: tests/prodcheck_test.sh
+
+      - name: Machine-readable output smoke test
+        run: scripts/prodcheck.sh --stage prototype --format json . | python3 -m json.tool >/dev/null

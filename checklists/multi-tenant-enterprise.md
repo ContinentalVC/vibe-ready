@@ -18,6 +18,9 @@ Use this when the app has teams, organizations, workspaces, customers, accounts,
 - [ ] Sensitive exports require permission checks.
 - [ ] API keys or service accounts are scoped to a tenant where applicable.
 - [ ] Enterprise SSO/SAML/OIDC requirements are implemented or explicitly out of scope.
+- [ ] Each tenant's SSO configuration, identity-provider metadata, certificates, client secrets, domains, and attribute mappings are isolated and bound to the intended tenant.
+- [ ] SSO validation checks trusted issuer, audience, destination or redirect URI, signature, time conditions, replay protections, and tenant binding as applicable to the protocol.
+- [ ] Just-in-time provisioning, invitations, SCIM or equivalent deprovisioning, group-to-role mapping, and break-glass access have explicit policies and tests.
 - [ ] Organization membership, domain capture, and account takeover edge cases are tested where applicable.
 - [ ] Minimal data permissions are enforced via RBAC. Users have access only to the information and resources necessary for their roles.
 - [ ] Data lifecycle management is defined: permissions granted during development are revoked when data goes live; data access is auditable and time-bounded where appropriate.
@@ -34,3 +37,5 @@ Use this when the app has teams, organizations, workspaces, customers, accounts,
 - [ ] Privacy policy and terms are present.
 - [ ] Security contact or support process is defined.
 - [ ] SOC 2, security questionnaire, DPA, subprocessors, and vulnerability management expectations are either supported or recorded as not yet available.
+- [ ] Procurement and security-questionnaire answers link to current evidence rather than unsupported claims.
+- [ ] Any public security or trust page names a vulnerability-reporting contact and makes only claims the organization can prove.
