@@ -71,7 +71,15 @@ Missing Context
 - Check whether dependencies are locked, scanned, and justified.
 - Check whether user files are stored and served through the right storage path with the right permissions.
 - Check whether cache invalidation protects auth, entitlements, billing, pricing, inventory, and other critical user-visible data.
+- Check whether authorization is enforced per route on the server, not only in edge or framework middleware.
+- Check which fields a client can write, and whether privileged fields are rejected rather than ignored.
+- Check whether redirect targets, session regeneration, and session timeout are handled, not just session expiry.
+- Check whether the server fetches user- or model-supplied URLs, and whether egress is restricted.
+- Check whether tenant scoping holds in cache keys, search indexes, queues, storage paths, and logs, not only in the database.
 - Check unhappy paths, not only the happy demo path.
 - Flag any PR touching auth, payments, data deletion, permissions, secrets, migrations, tenant isolation, or production config.
 - For AI features, require output validation, cost controls, fallbacks, evals or test cases, and rate limits.
+- For AI features with data access, require that scoping is enforced outside the prompt and that retrieval filters by the requesting user's permissions.
+- For agents, require a scoped agent identity separate from human credentials, outbound allowlists, and durable state for long-running tasks.
+- Do not rely on the model that wrote the code to audit it; recommend review by a different model, tool, or person.
 - For payments, require idempotency keys, webhook verification, webhook deduplication, and durable payment events.

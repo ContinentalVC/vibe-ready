@@ -20,6 +20,7 @@
 - [ ] Add MCP/tool readiness checklist.
 - [x] Add staged maturity model with gated launch checks.
 - [x] Add stack-agnostic project structure template.
+- [x] Expand coverage from field-review topics: browser and session security, agent egress and identity, retrieval permissions, tenant scoping in shared layers, operational communication, and accessibility.
 
 ## v0.3
 
