@@ -167,6 +167,18 @@ else
   info "No Kubernetes configuration found"
 fi
 
+if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  tracked_captures="$(git ls-files 2>/dev/null | grep -Ei '(^|/)(\.playwright-mcp|screenshots?|screen[ _-]?recordings?)/|(^|/)(screenshot|screen[ _-]?shot|screen[ _-]?recording)[^/]*\.(png|jpe?g|gif|webp|mov|mp4)$' | head -10 || true)"
+  if [ -n "$tracked_captures" ]; then
+    warn "Screenshots or recordings are tracked in git. AI coding tools can capture credentials and customer data; confirm these are intentional before pushing or making the repo public:"
+    echo "$tracked_captures" | sed 's/^/        /'
+  else
+    pass "No obvious screenshot or recording artifacts tracked in git"
+  fi
+else
+  info "Not a git work tree; skipped tracked-artifact check"
+fi
+
 if command -v rg >/dev/null 2>&1; then
   set +e
   rg -n --hidden --glob '!node_modules' --glob '!.git' --glob '!dist' --glob '!build' --glob '!scripts/prodcheck.sh' "$secret_pattern" . >"$secret_scan_file" 2>"${secret_scan_file}.err"

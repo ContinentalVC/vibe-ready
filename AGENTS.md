@@ -76,6 +76,10 @@ Missing Context
 - Check whether redirect targets, session regeneration, and session timeout are handled, not just session expiry.
 - Check whether the server fetches user- or model-supplied URLs, and whether egress is restricted.
 - Check whether tenant scoping holds in cache keys, search indexes, queues, storage paths, and logs, not only in the database.
+- Check every inbound webhook endpoint for signature verification and duplicate-event handling, not only payment webhooks.
+- Check whether AI tool artifacts (screenshots, recordings, session logs, tool cache directories) are tracked in version control.
+- Check whether services are segmented and authenticate each other, or whether anything on the network can call anything else.
+- Walk the request path layer by layer (DNS, CDN or edge, load balancer, reverse proxy or WAF, application server, middleware, business logic, data-access layer, database, file and object storage, host OS, network) and note which layers have no owner or no review evidence.
 - Check unhappy paths, not only the happy demo path.
 - Flag any PR touching auth, payments, data deletion, permissions, secrets, migrations, tenant isolation, or production config.
 - For AI features, require output validation, cost controls, fallbacks, evals or test cases, and rate limits.

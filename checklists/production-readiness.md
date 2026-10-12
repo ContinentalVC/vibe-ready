@@ -43,6 +43,9 @@ Use this before calling an app production-ready.
 - [ ] Dependency update automation is reviewed rather than blindly merged.
 - [ ] Unused dependencies are removed, especially packages with broad postinstall, filesystem, network, or environment access.
 - [ ] New dependencies have a reason that justifies their maintenance and security surface area.
+- [ ] Infrastructure components such as datastores, caches, queues, runtimes, and base images are pinned to specific versions in configuration. Upgrades are reviewed on a deliberate schedule rather than inherited from whatever a package manager or `latest` tag resolves to on the next deploy.
+- [ ] Datastore and cache clients are wrapped behind a thin interface, so the backing service can be swapped or upgraded without editing every file that imports the client.
+- [ ] When a critical component changes license or governance, or is forked, the team confirms which distribution now receives timely security patches and records a decision to stay or migrate.
 
 ## Backend And API
 
@@ -62,6 +65,7 @@ Use this before calling an app production-ready.
 - [ ] GraphQL endpoints, if present, limit query depth and complexity and disable introspection in production.
 - [ ] Asynchronous events that fail repeatedly land in a dead-letter queue for inspection and replay instead of being dropped silently.
 - [ ] Writes that must reach a search index, analytics store, or notification system have a defined propagation path and a way to detect when a downstream system has fallen out of sync with the database.
+- [ ] Every inbound webhook endpoint verifies the sender's signature and rejects duplicate event IDs, not only payment webhooks. Authentication providers, git hosts, email services, and other SaaS integrations send events that the application acts on as commands. Audit all endpoints at once, since each unverified one is a separate way in.
 
 ## Database
 
@@ -98,6 +102,10 @@ Use this before calling an app production-ready.
 - [ ] Databases store file metadata, ownership, and object references rather than raw large file contents where practical.
 - [ ] File buckets default to private for sensitive or user-owned content.
 - [ ] File access uses signed URLs, permission checks, or scoped public paths intentionally.
+- [ ] Public assets and private data live in separate buckets or containers. Database backups, user exports, and configuration files are never stored alongside publicly readable files.
+- [ ] Signed URLs are short-lived and scoped to a single object.
+- [ ] Bucket and container names do not reveal the company, environment, or purpose, so they cannot be guessed from common naming patterns. Name obscurity supplements access control and never replaces it.
+- [ ] Storage access logging is enabled, with alerts on unusual download volume or access from unexpected networks. Without it, weeks of unauthorized downloads leave no record.
 - [ ] Public assets are served through a CDN or equivalent cache layer where expected traffic justifies it.
 - [ ] File retention, deletion, and orphan cleanup behavior are defined.
 
@@ -145,12 +153,17 @@ Use this before calling an app production-ready.
 - [ ] Restore drills are scheduled and timed, and the measured restore duration is compared against the stated RTO rather than assumed to fit.
 - [ ] Protection against volumetric attacks exists ahead of application compute: rate limiting at the edge, bot management on high-value routes such as login, pricing, and checkout, and behavior-based throttling that escalates.
 - [ ] A denial-of-service response playbook names who is paged, what can be toggled, and where traffic is redirected.
+- [ ] A reverse proxy that only routes traffic is not treated as a firewall. A web application firewall with a maintained managed rule set (for example, the OWASP Core Rule Set) runs in blocking mode on routes that accept user input, covering injection, cross-site scripting, and path traversal.
+- [ ] Repeat offenders are banned automatically with escalating durations, and spikes in blocked requests or bans alert someone, so active probing is noticed while it is happening rather than afterward.
 - [ ] Where a CDN or WAF fronts the application, the origin does not accept traffic directly. The origin firewall allowlists the provider's ranges, and strict TLS is enforced between edge and origin, so the protection cannot be bypassed by discovering the origin address.
 
 ## Documentation And Operations
 
 - [ ] Setup, deploy, rollback, and common support workflows are documented for someone other than the original builder.
 - [ ] Operational docs identify owners for auth, database, storage, billing, AI providers, monitoring, and incident response.
+- [ ] Source code is organized so a second developer, an auditor, or the original author at 2am can find and review a given function: no single-file applications, clear module boundaries, and consistent naming. An AI assistant judging that a large file works fine as one piece is not the bar.
+- [ ] A privacy policy and terms of service exist before public signups, plus a data processing agreement where third parties process user data. They describe the app's actual data flows rather than a generic template.
+- [ ] A recurring compliance review (for example, quarterly) has an owner, a calendar date, and a list of the regulatory sources and jurisdictions that apply to the app's users, covering privacy law, cookie consent, and data residency changes.
 - [ ] Known tradeoffs and accepted risks are recorded in a risk register with an owner and review date.
 - [ ] A status page hosted independently of the application's own infrastructure exists for production services, so it stays reachable during an outage of the thing it reports on.
 - [ ] Incident communication has a defined cadence and owner: when the first notice goes out, how often it is updated, and who writes it. Planned maintenance is announced in advance.

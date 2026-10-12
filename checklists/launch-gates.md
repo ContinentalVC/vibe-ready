@@ -11,6 +11,7 @@ Not everything is required from day 1. Use this matrix to determine which checkl
 | Auth (login, sessions) | | ✅ | ✅ | ✅ | ✅ |
 | Authorization (permissions, ownership) | | ✅ | ✅ | ✅ | ✅ |
 | Secrets management (no committed keys) | ✅ | ✅ | ✅ | ✅ | ✅ |
+| AI-tool artifacts kept out of version control | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Database migrations | | ✅ | ✅ | ✅ | ✅ |
 | Backups & rollback plan | | ✅ | ✅ | ✅ | ✅ |
 | Safe user-facing errors | | ✅ | ✅ | ✅ | ✅ |
@@ -25,6 +26,8 @@ Not everything is required from day 1. Use this matrix to determine which checkl
 | Third-party script inventory | | | ✅ | ✅ | ✅ |
 | Accessibility (WCAG AA) | | | ✅ | ✅ | ✅ |
 | Edge / DDoS protection | | | ✅ | ✅ | ✅ |
+| MFA for admin & privileged accounts | | | ✅ | ✅ | ✅ |
+| Privacy policy & terms (before public signup) | | | ✅ | ✅ | ✅ |
 | API versioning & deprecation policy | | | ✅ if API | ✅ | ✅ |
 | Cache invalidation (auth, billing, entitlements) | | | ✅ | ✅ | ✅ |
 | AI output validation & safety | | | ✅ if AI | ✅ | ✅ |
@@ -43,6 +46,7 @@ Not everything is required from day 1. Use this matrix to determine which checkl
 | Status page & incident communication | | | | ✅ | ✅ |
 | Postmortem process | | | | ✅ | ✅ |
 | Backup granularity meets stated RPO | | | | ✅ | ✅ |
+| Service network segmentation & least privilege | | | | ✅ | ✅ |
 | Tenant isolation | | | | | ✅ |
 | Shared-layer tenant scoping (cache, search, queues, storage) | | | | | ✅ |
 | Audit logs (sensitive actions) | | | | | ✅ |
@@ -66,6 +70,7 @@ Required:
 
 - Clear warning that it is not production-ready
 - No real credentials in code
+- Screenshots, recordings, and logs produced by AI coding tools are not committed, and no repository is public unless that is intended
 
 ## Private Beta
 
@@ -120,6 +125,8 @@ Required:
 - Public APIs are versioned and have a documented deprecation path
 - AI features scope data access to the authenticated user outside the prompt, and agent tools enforce outbound allowlists
 - AI disclosure, consent, and generation logging are in place where regulation requires them
+- Multi-factor authentication is available to users and required for admin and support accounts
+- A privacy policy and terms of service are published and reflect the app's actual data flows, with a data processing agreement where third parties process user data
 
 ## Production
 
@@ -139,6 +146,7 @@ Required:
 - Post-launch monitoring plan
 - Disaster recovery strategy is defined with concrete RTO and RPO targets and has been tested
 - Backup frequency actually meets the stated RPO, and a timed restore drill confirms the RTO
+- Services are network-segmented and authenticate each other, credentials follow least privilege, and storage separates public assets from private data
 - A status page hosted off the application's own infrastructure exists, with a defined incident update cadence and owner
 - A postmortem template exists and reviews are blameless, time-bounded, and searchable
 - Support tickets are reviewed as a monitoring signal and categorized by root cause

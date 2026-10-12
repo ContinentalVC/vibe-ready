@@ -15,6 +15,8 @@ Reference anchor: aligned with OWASP Top 10 2021, OWASP ASVS-style controls, CWE
 - [ ] Refresh tokens, if used, are protected and revocable.
 - [ ] Password reset links expire and are single-use where possible.
 - [ ] Login and password reset endpoints have rate limits.
+- [ ] Multi-factor authentication is available to all users and required for admin, support, and other privileged accounts. Account recovery and support-assisted resets do not bypass it.
+- [ ] Passwordless sign-in links and one-time codes expire within minutes, are single-use, and are invalidated on first use. Requests are rate limited per address and per source IP, because each request sends real email from your domain and can flood a victim's inbox or damage sender reputation.
 - [ ] Post-login, post-logout, and post-reset redirect targets are validated against an allowlist. Redirect values are parsed as URLs rather than string-matched, so protocol-relative (`//host`), backslash, and encoded variants are rejected.
 
 ## Authorization
@@ -36,6 +38,8 @@ Reference anchor: aligned with OWASP Top 10 2021, OWASP ASVS-style controls, CWE
 - [ ] API keys are not present in frontend bundles.
 - [ ] `.env` files are ignored.
 - [ ] `.env.example` documents required variables without real values.
+- [ ] Artifacts produced by AI coding tools are kept out of version control, and agent-authored commits are reviewed before they are pushed. Screenshots, screen recordings, session transcripts, debug dumps, and tool cache directories can capture credentials, customer data, and internal dashboards, and are easy to commit to a public repository unnoticed.
+- [ ] Permissions granted to AI coding assistants (screen capture, filesystem scope, network access, push rights) are limited to what the task needs and reviewed periodically. Repository visibility is verified for every repository those tools can push to.
 - [ ] Secret scanning runs before merge.
 - [ ] The production build output is inspected for secrets and server-only values, not just the source tree. Framework server/client boundaries are verified rather than assumed.
 - [ ] Server-only modules are marked so that importing them from client code fails the build where the framework supports it.
@@ -54,6 +58,9 @@ Reference anchor: aligned with OWASP Top 10 2021, OWASP ASVS-style controls, CWE
 - [ ] Machine credentials are scoped per service, environment, and permission rather than shared globally.
 - [ ] API keys, client credentials, and service tokens are stored server-side, rotated, and logged without secret values.
 - [ ] Internal APIs enforce authorization even when traffic originates from another trusted service.
+- [ ] Services are network-segmented so each can reach only the services it needs. A low-trust component such as a marketing tool, admin UI, or worker cannot open a connection straight to the production database or to other internal services.
+- [ ] Internal service-to-service calls authenticate with mutual TLS or service tokens. Network location alone is never treated as proof of identity.
+- [ ] Each container, service account, and network rule has the minimum privilege its job requires: database credentials are read-only where writes are not needed, and services that do not need outbound internet access cannot make it.
 - [ ] The auth approach (session-based vs. JWT-based) is chosen with documented tradeoffs. Session-based: state stored server-side, easy revocation, but requires session store lookup on every request. JWT-based: stateless, no server session needed, but token revocation is harder and tokens carry more data.
 - [ ] If OAuth 2.0 is used, the correct flow is chosen: Authorization Code Flow (with PKCE for public clients) for web/mobile apps, Client Credentials Flow for machine-to-machine, not Implicit Flow or Resource Owner Password Grant for user-facing apps unless there is a documented legacy reason.
 - [ ] SSO, if implemented, uses a central authentication server with token-based validation across services. The SSO token is validated by each service against the auth server, not trusted blindly from the client.
@@ -73,6 +80,7 @@ Reference anchor: aligned with OWASP Top 10 2021, OWASP ASVS-style controls, CWE
 - [ ] Dependencies are scanned for known vulnerabilities.
 - [ ] Security headers are configured where applicable.
 - [ ] CORS uses an explicit origin allowlist and does not combine wildcard origins with credentials.
+- [ ] The request `Origin` header is checked against the allowlist before it is reflected into `Access-Control-Allow-Origin`, and credentials are enabled only for matched origins. Echoing the origin back unchecked is functionally a wildcard, and it passes scanners that only look for `*`.
 - [ ] Content Security Policy is defined for apps rendering user, AI, markdown, or third-party content.
 - [ ] Every externally loaded browser resource is inventoried and justified: scripts, stylesheets, fonts, tracking pixels, and iframes. Anything that cannot be explained is removed.
 - [ ] Third-party scripts are kept off login, checkout, account settings, and admin pages, so a compromised vendor cannot read credentials or payment input.
